@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block titulo %}Usuários — Raphael-GSilva Controle de Inventário{% endblock %}
+{% block conteudo %}
+
+<div class="cabecalho-pagina">
+  <div>
+    <h1>Usuários</h1>
+    <p>Quem já acessou o sistema e qual o papel de cada um.</p>
+  </div>
+</div>
+
+<div class="cartao" style="padding:0; overflow-x:auto;">
+  <table class="tabela">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th>Papel atual</th>
+        <th>Último login</th>
+        <th>Alterar papel</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in usuarios %}
+      <tr>
+        <td>{{ u.nome }}</td>
+        <td>{{ u.email }}</td>
+        <td><span class="badge status-{{ 'em_estoque' if u.papel == 'ADMIN' else ('alocado' if u.papel == 'ANALISTA' else 'baixado') }}">{{ u.papel }}</span></td>
+        <td>{{ u.ultimo_login or "—" }}</td>
+        <td>
+          <form method="POST" action="{{ url_for('admin.alterar_papel', usuario_id=u.id) }}" style="display:flex; gap:6px;">
+            <select name="papel" style="padding:6px 8px; border:1px solid var(--cor-borda); border-radius:6px;">
+              {% for papel in papeis %}
+              <option value="{{ papel }}" {{ 'selected' if papel == u.papel }}>{{ papel }}</option>
+              {% endfor %}
+            </select>
+            <button type="submit" class="botao secundario" style="padding:6px 12px;">Salvar</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

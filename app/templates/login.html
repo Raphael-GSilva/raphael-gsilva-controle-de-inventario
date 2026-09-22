@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block titulo %}Entrar — Raphael-GSilva Controle de Inventário{% endblock %}
+{% block conteudo_sem_login %}
+<div class="pagina-login">
+  <div class="caixa-login">
+    <div class="marca">
+      <h1>Raphael-GSilva</h1>
+      <p style="color: var(--cor-texto-suave); margin: 4px 0 0; font-size: 13px;">Controle de Inventário</p>
+    </div>
+
+    {% if erro %}
+      <div class="flash erro">{{ erro }}</div>
+    {% endif %}
+
+    {% if modo_mock %}
+      <p style="font-size:13px;color:var(--cor-texto-suave);margin-top:0;">
+        Modo de desenvolvimento (AUTH_MODE=mock) — sem Microsoft real. Digite qualquer nome e e-mail para entrar.
+      </p>
+      <form method="POST" class="formulario">
+        <div class="campo">
+          <label for="nome">Nome</label>
+          <input type="text" id="nome" name="nome" required autofocus>
+        </div>
+        <div class="campo">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" required>
+          <div class="dica">O primeiro login com um e-mail vira um usuário novo com papel CONSULTA.</div>
+        </div>
+        <button type="submit" class="botao" style="width:100%; justify-content:center;">Entrar</button>
+      </form>
+    {% else %}
+      <p style="font-size:14px;color:var(--cor-texto-suave);">
+        Não foi possível concluir o login com a Microsoft.
+      </p>
+      <a class="botao" style="width:100%; justify-content:center;" href="{{ url_for('auth.login') }}">Tentar novamente</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

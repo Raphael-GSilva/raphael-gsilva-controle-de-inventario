@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block titulo %}Dashboard — Raphael-GSilva Controle de Inventário{% endblock %}
+{% block conteudo %}
+
+<div class="cabecalho-pagina">
+  <div>
+    <h1>Dashboard</h1>
+    <p>Visão geral do inventário de equipamentos.</p>
+  </div>
+  {% if usuario_atual.pode_movimentar %}
+  <div style="display:flex; gap:8px;">
+    {% if sync_habilitado %}
+    <form method="POST" action="{{ url_for('dashboard.sincronizar_sharepoint') }}">
+      <button type="submit" class="botao secundario">Importar do SharePoint</button>
+    </form>
+    {% endif %}
+    <a class="botao" href="{{ url_for('movimentacoes.entrada') }}">+ Nova entrada</a>
+  </div>
+  {% endif %}
+</div>
+
+<div class="grade-cartoes">
+  <div class="cartao cartao-metrica">
+    <div class="valor">{{ total_equipamentos }}</div>
+    <div class="rotulo">Total de equipamentos</div>
+  </div>
+  <div class="cartao cartao-metrica">
+    <div class="valor" style="color:var(--cor-status-estoque)">{{ por_status.get('EM_ESTOQUE', 0) }}</div>
+    <div class="rotulo">Em estoque</div>
+  </div>
+  <div class="cartao cartao-metrica">
+    <div class="valor" style="color:var(--cor-status-alocado)">{{ por_status.get('ALOCADO', 0) }}</div>
+    <div class="rotulo">Alocados</div>
+  </div>
+  <div class="cartao cartao-metrica">
+    <div class="valor" style="color:var(--cor-status-manutencao)">{{ por_status.get('MANUTENCAO', 0) }}</div>
+    <div class="rotulo">Em manutenção</div>
+  </div>
+</div>
+
+<div style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+  <div class="cartao">
+    <h3>Por tipo de equipamento</h3>
+    {% if por_tipo %}
+      {% set maior = por_tipo.values() | max %}
+      <div style="margin-top:12px; display:flex; flex-direction:column; gap:10px;">
+        {% for tipo, total in por_tipo.items() %}
+        <div>
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+            <span>{{ tipo }}</span><span class="mono">{{ total }}</span>
+          </div>
+          <div style="background:var(--cor-fundo); border-radius:4px; height:6px;">
+            <div style="background:var(--cor-acento); width:{{ (total / maior * 100) | round(1) }}%; height:6px; border-radius:4px;"></div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="vazio">Nenhum equipamento cadastrado ainda.</p>
+    {% endif %}
+  </div>
+
+  <div class="cartao">
+    <h3>Por empresa</h3>
+    {% if por_empresa %}
+      {% set maior_emp = por_empresa.values() | max %}
+      <div style="margin-top:12px; display:flex; flex-direction:column; gap:10px;">
+        {% for empresa, total in por_empresa.items() %}
+        <div>
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+            <span>{{ empresa }}</span><span class="mono">{{ total }}</span>
+          </div>
+          <div style="background:var(--cor-fundo); border-radius:4px; height:6px;">
+            <div style="background:#7c6ff0; width:{{ (total / maior_emp * 100) | round(1) }}%; height:6px; border-radius:4px;"></div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="vazio">Nenhum equipamento vinculado a uma empresa ainda.</p>
+    {% endif %}
+  </div>
+</div>
+
+<div style="display:grid; grid-template-columns: 1.3fr 1fr; gap: 16px;">
+  <div class="cartao">
+    <h3>Movimentações recentes</h3>
+    {% if recentes %}
+      <ul class="linha-tempo" style="margin-top:14px;">
+        {% for mov in recentes %}
+        <li>
+          <div class="tipo">{{ mov.tipo_label }} — <span class="mono">{{ mov.equipamento_nr_ativo }}</span></div>
+          <div class="detalhe">
+            {% if mov.nome_colaborador %}{{ mov.nome_colaborador }} · {% endif %}
+            {{ mov.analista_nome or "—" }}
+          </div>
+          <div class="quando">{{ mov.data_movimentacao }}</div>
+        </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="vazio">Nenhuma movimentação registrada ainda.</p>
+    {% endif %}
+    <div style="margin-top:12px;"><a href="{{ url_for('movimentacoes.historico') }}">Ver histórico completo →</a></div>
+  </div>
+
+  <div class="cartao">
+    <h3>Aguardando preparação</h3>
+    {% if pendentes_preparacao %}
+      <div style="margin-top:14px; display:flex; flex-direction:column; gap:12px;">
+        {% for eq in pendentes_preparacao %}
+        <div>
+          <a href="{{ url_for('equipamentos.detalhe', equipamento_id=eq.id) }}" class="tag-ativo">{{ eq.nr_ativo }}</a>
+          <div style="font-size:13px; color:var(--cor-texto-suave); margin-top:3px;">{{ eq.tipo }}{% if eq.modelo %} · {{ eq.modelo }}{% endif %}</div>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="vazio">Tudo preparado por aqui.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

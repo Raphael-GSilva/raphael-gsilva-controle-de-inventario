@@ -1,0 +1,10 @@
+Flask==3.1.3
+python-dotenv==1.2.2
+requests==2.33.1
+openpyxl==3.1.5
+msal==1.36.0
+
+# Nenhum ORM (SQLAlchemy), nenhum Flask-Login, nenhum Flask-WTF de
+# propósito — o projeto usa sqlite3 (biblioteca padrão do Python) e forms
+# HTML simples. Menos dependências = menos coisa que pode quebrar ou ficar
+# desatualizada. Ver app/db.py para o motivo detalhado.

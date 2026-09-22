@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block titulo %}Não encontrado — Raphael-GSilva Controle de Inventário{% endblock %}
+{% block conteudo %}
+<div class="vazio cartao">
+  <h2>{{ mensagem }}</h2>
+  <p><a href="{{ url_for('dashboard.index') }}">Voltar ao dashboard</a></p>
+</div>
+{% endblock %}
+{% block conteudo_sem_login %}
+<div class="pagina-login">
+  <div class="caixa-login" style="text-align:center;">
+    <h2>{{ mensagem }}</h2>
+    <p><a href="{{ url_for('auth.login') }}">Ir para o login</a></p>
+  </div>
+</div>
+{% endblock %}

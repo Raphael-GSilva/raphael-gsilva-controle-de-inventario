@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block titulo %}Devolução de equipamento — Raphael-GSilva Controle de Inventário{% endblock %}
+{% block conteudo %}
+
+<div class="cabecalho-pagina">
+  <div>
+    <h1>Devolução</h1>
+    <p>Registra a devolução de um equipamento que estava alocado a um colaborador.</p>
+  </div>
+</div>
+
+<form method="POST" class="cartao formulario">
+  <div class="campo">
+    <label for="nr_ativo">Nº de ativo *</label>
+    <input type="text" id="nr_ativo" name="nr_ativo" required autofocus placeholder="Digite o nº do ativo alocado">
+    <div class="dica">O equipamento precisa estar com status "Alocado".</div>
+  </div>
+
+  <div class="campo">
+    <label for="condicao_devolucao">Condição de devolução *</label>
+    <select id="condicao_devolucao" name="condicao_devolucao" required>
+      <option value="Bom">Bom</option>
+      <option value="Regular">Regular</option>
+      <option value="Ruim">Ruim (vai para manutenção)</option>
+    </select>
+  </div>
+
+  <div class="campo">
+    <label for="nr_chamado">Nº do chamado</label>
+    <input type="text" id="nr_chamado" name="nr_chamado" placeholder="Ex: RITM0123456">
+  </div>
+
+  <div class="campo">
+    <label for="observacoes">Observações</label>
+    <textarea id="observacoes" name="observacoes" rows="3" placeholder="Ex: tela riscada, sem carregador, etc."></textarea>
+  </div>
+
+  <button type="submit" class="botao">Registrar devolução</button>
+</form>
+
+{% endblock %}

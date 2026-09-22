@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block titulo %}{{ equipamento.nr_ativo }} — Raphael-GSilva Controle de Inventário{% endblock %}
+{% block conteudo %}
+
+<div class="cabecalho-pagina">
+  <div>
+    <h1><span class="tag-ativo" style="font-size:20px;">{{ equipamento.nr_ativo }}</span></h1>
+    <p>{{ equipamento.tipo }}{% if equipamento.modelo %} · {{ equipamento.modelo }}{% endif %}</p>
+  </div>
+  <span class="badge status-{{ equipamento.status | lower }}" style="font-size:13px; padding:6px 14px;">{{ equipamento.status_label }}</span>
+</div>
+
+<div style="display:grid; grid-template-columns: 1fr 1.3fr; gap:16px;">
+  <div class="cartao">
+    <h3>Dados do equipamento</h3>
+    <div style="margin-top:12px; font-size:14px; display:flex; flex-direction:column; gap:10px;">
+      <div><strong>Nº de série:</strong> <span class="mono">{{ equipamento.nr_serie or "—" }}</span></div>
+      <div><strong>Empresa:</strong> {{ equipamento.empresa_nome or "—" }}</div>
+      <div><strong>Owner do ativo:</strong> {{ equipamento.owner_ativo or "—" }}</div>
+      <div><strong>Recebido em:</strong> {{ equipamento.data_recebimento | data_br }}</div>
+      <div><strong>Máquina preparada:</strong> {{ equipamento.maquina_preparada | sim_nao }}</div>
+      <div><strong>Previsão de alocação:</strong> {{ equipamento.previsao_alocacao | sim_nao }}</div>
+      {% if equipamento.status == 'ALOCADO' %}
+      <div><strong>Colaborador atual:</strong> {{ equipamento.colaborador_atual }} ({{ equipamento.empresa_colaborador_atual or "—" }})</div>
+      {% endif %}
+      {% if equipamento.observacoes %}
+      <div><strong>Observações:</strong> {{ equipamento.observacoes }}</div>
+      {% endif %}
+      <div style="color:var(--cor-texto-suave); font-size:12px; padding-top:6px; border-top:1px solid var(--cor-borda);">
+        {% if equipamento.sincronizado_em %}
+          Sincronizado com o SharePoint em {{ equipamento.sincronizado_em }}
+        {% else %}
+          Ainda não sincronizado com o SharePoint
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="cartao">
+    <h3>Histórico de movimentações</h3>
+    {% if historico %}
+      <ul class="linha-tempo" style="margin-top:14px;">
+        {% for mov in historico %}
+        <li>
+          <div class="tipo">{{ mov.tipo_label }}</div>
+          <div class="detalhe">
+            {% if mov.nome_colaborador %}{{ mov.nome_colaborador }}{% if mov.empresa_colaborador %} · {{ mov.empresa_colaborador }}{% endif %}<br>{% endif %}
+            {% if mov.nr_chamado %}Chamado {{ mov.nr_chamado }} · {% endif %}
+            {% if mov.condicao_devolucao %}Condição: {{ mov.condicao_devolucao }} · {% endif %}
+            Registrado por {{ mov.analista_nome or "—" }}
+            {% if mov.observacoes %}<br>{{ mov.observacoes }}{% endif %}
+          </div>
+          <div class="quando">{{ mov.data_movimentacao }}</div>
+        </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="vazio">Nenhuma movimentação registrada para este equipamento.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

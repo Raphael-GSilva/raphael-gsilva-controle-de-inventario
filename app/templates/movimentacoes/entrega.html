@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block titulo %}Entrega de equipamento — Raphael-GSilva Controle de Inventário{% endblock %}
+{% block conteudo %}
+
+<div class="cabecalho-pagina">
+  <div>
+    <h1>Entrega a colaborador</h1>
+    <p>Entrega um equipamento que está em estoque a um colaborador.</p>
+  </div>
+</div>
+
+<form method="POST" class="cartao formulario">
+  <div class="campo">
+    <label for="nr_ativo">Nº de ativo *</label>
+    <input type="text" id="nr_ativo" name="nr_ativo" required autofocus placeholder="Digite o nº do ativo em estoque">
+    <div class="dica">O equipamento precisa estar com status "Em estoque".</div>
+  </div>
+
+  <div class="linha-campos">
+    <div class="campo">
+      <label for="nome_colaborador">Nome do colaborador *</label>
+      <input type="text" id="nome_colaborador" name="nome_colaborador" required>
+    </div>
+    <div class="campo">
+      <label for="empresa_colaborador">Empresa do colaborador</label>
+      <input type="text" id="empresa_colaborador" name="empresa_colaborador">
+    </div>
+  </div>
+
+  <div class="campo">
+    <label for="nr_chamado">Nº do chamado</label>
+    <input type="text" id="nr_chamado" name="nr_chamado" placeholder="Ex: RITM0123456">
+  </div>
+
+  <div class="campo">
+    <label for="observacoes">Observações</label>
+    <textarea id="observacoes" name="observacoes" rows="3"></textarea>
+  </div>
+
+  <button type="submit" class="botao">Registrar entrega</button>
+</form>
+
+{% endblock %}

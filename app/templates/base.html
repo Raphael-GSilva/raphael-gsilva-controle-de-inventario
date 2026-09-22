@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block titulo %}Raphael-GSilva Controle de Inventário{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  {% if usuario_atual %}
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="marca">
+        Raphael-GSilva
+        <small>Controle de Inventário</small>
+      </div>
+      <nav>
+        <a class="item {{ 'ativo' if request.endpoint == 'dashboard.index' }}" href="{{ url_for('dashboard.index') }}">Dashboard</a>
+        <a class="item {{ 'ativo' if request.endpoint == 'equipamentos.lista' }}" href="{{ url_for('equipamentos.lista') }}">Consultar equipamentos</a>
+
+        {% if usuario_atual.pode_movimentar %}
+        <div class="grupo-titulo">Movimentações</div>
+        <a class="item {{ 'ativo' if request.endpoint == 'movimentacoes.entrada' }}" href="{{ url_for('movimentacoes.entrada') }}">Entrada de equipamento</a>
+        <a class="item {{ 'ativo' if request.endpoint == 'movimentacoes.entrega' }}" href="{{ url_for('movimentacoes.entrega') }}">Entrega a colaborador</a>
+        <a class="item {{ 'ativo' if request.endpoint == 'movimentacoes.devolucao' }}" href="{{ url_for('movimentacoes.devolucao') }}">Devolução</a>
+        {% endif %}
+        <a class="item {{ 'ativo' if request.endpoint == 'movimentacoes.historico' }}" href="{{ url_for('movimentacoes.historico') }}">Histórico</a>
+
+        {% if usuario_atual.eh_admin %}
+        <div class="grupo-titulo">Administração</div>
+        <a class="item {{ 'ativo' if request.endpoint == 'admin.usuarios' }}" href="{{ url_for('admin.usuarios') }}">Usuários</a>
+        {% endif %}
+      </nav>
+      <div class="usuario-box">
+        <div class="nome">{{ usuario_atual.nome }}</div>
+        <span class="papel">{{ usuario_atual.papel }}</span>
+        <div style="margin-top: 8px;"><a href="{{ url_for('auth.logout') }}">Sair</a></div>
+      </div>
+    </aside>
+    <main class="conteudo">
+      {% with mensagens = get_flashed_messages(with_categories=true) %}
+        {% for categoria, mensagem in mensagens %}
+          <div class="flash {{ categoria }}">{{ mensagem }}</div>
+        {% endfor %}
+      {% endwith %}
+      {% block conteudo %}{% endblock %}
+    </main>
+  </div>
+  {% else %}
+    {% with mensagens = get_flashed_messages(with_categories=true) %}
+      {% for categoria, mensagem in mensagens %}
+        <div class="flash {{ categoria }}" style="max-width:380px;margin:12px auto 0;">{{ mensagem }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block conteudo_sem_login %}{% endblock %}
+  {% endif %}
+</body>
+</html>

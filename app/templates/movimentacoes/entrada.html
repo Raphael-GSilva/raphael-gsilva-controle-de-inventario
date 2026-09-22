@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block titulo %}Entrada de equipamento — Raphael-GSilva Controle de Inventário{% endblock %}
+{% block conteudo %}
+
+<div class="cabecalho-pagina">
+  <div>
+    <h1>Entrada de equipamento</h1>
+    <p>Registra um equipamento novo (ou reincorporado) no estoque.</p>
+  </div>
+</div>
+
+<form method="POST" class="cartao formulario">
+  <div class="linha-campos">
+    <div class="campo">
+      <label for="nr_ativo">Nº de ativo *</label>
+      <input type="text" id="nr_ativo" name="nr_ativo" required autofocus>
+    </div>
+    <div class="campo">
+      <label for="nr_serie">Nº de série</label>
+      <input type="text" id="nr_serie" name="nr_serie">
+    </div>
+  </div>
+
+  <div class="linha-campos">
+    <div class="campo">
+      <label for="tipo">Tipo de equipamento *</label>
+      <input type="text" id="tipo" name="tipo" list="lista-tipos" required placeholder="Ex: Notebook, Desktop, Monitor...">
+      <datalist id="lista-tipos">
+        {% for t in tipos %}
+        <option value="{{ t }}">
+        {% endfor %}
+      </datalist>
+      <div class="dica">Digite livremente — as sugestões aparecem a partir dos tipos já cadastrados.</div>
+    </div>
+    <div class="campo">
+      <label for="modelo">Modelo</label>
+      <input type="text" id="modelo" name="modelo" placeholder="Marca e modelo do equipamento">
+    </div>
+  </div>
+
+  <div class="linha-campos">
+    <div class="campo">
+      <label for="empresa_nome">Empresa</label>
+      <input type="text" id="empresa_nome" name="empresa_nome" list="lista-empresas" placeholder="Nome da empresa ou unidade">
+      <datalist id="lista-empresas">
+        {% for empresa in empresas %}
+        <option value="{{ empresa.nome }}">
+        {% endfor %}
+      </datalist>
+    </div>
+    <div class="campo">
+      <label for="owner_ativo">Owner do ativo</label>
+      <input type="text" id="owner_ativo" name="owner_ativo" placeholder="Quem é o responsável por este ativo">
+    </div>
+  </div>
+
+  <div class="linha-campos">
+    <div class="campo">
+      <label for="data_recebimento">Data de recebimento</label>
+      <input type="date" id="data_recebimento" name="data_recebimento">
+    </div>
+    <div class="campo">
+      <label for="nr_chamado">Nº do chamado</label>
+      <input type="text" id="nr_chamado" name="nr_chamado" placeholder="Ex: RITM0123456">
+    </div>
+  </div>
+
+  <div class="linha-campos">
+    <div class="campo campo-checkbox">
+      <input type="checkbox" id="maquina_preparada" name="maquina_preparada">
+      <label for="maquina_preparada" style="margin:0;">Máquina já preparada</label>
+    </div>
+    <div class="campo campo-checkbox">
+      <input type="checkbox" id="previsao_alocacao" name="previsao_alocacao">
+      <label for="previsao_alocacao" style="margin:0;">Já tem previsão de alocação</label>
+    </div>
+  </div>
+
+  <div class="campo">
+    <label for="observacoes">Observações</label>
+    <textarea id="observacoes" name="observacoes" rows="3"></textarea>
+  </div>
+
+  <button type="submit" class="botao">Registrar entrada</button>
+</form>
+
+{% endblock %}
