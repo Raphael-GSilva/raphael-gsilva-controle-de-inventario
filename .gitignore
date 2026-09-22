@@ -12,10 +12,15 @@ instance/
 __pycache__/
 *.pyc
 *.pyo
+*.py[codz]
+*$py.class
 .venv/
 venv/
 env/
+ENV/
 *.egg-info/
+build/
+dist/
 
 # Editor / SO
 .vscode/
