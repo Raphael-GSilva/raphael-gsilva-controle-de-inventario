@@ -1,4 +1,5 @@
 # Raphael-GSilva Controle de Inventário
+![Dashboard](Controle%20Invent%C3%A1rio.jpeg)
 
 Sistema de controle de inventário de equipamentos: entrada/devolução,
 entrega a colaboradores, consulta e dashboard, com login via Microsoft
