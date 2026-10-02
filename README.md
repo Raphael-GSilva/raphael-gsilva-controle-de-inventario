@@ -4,6 +4,8 @@ Sistema de controle de inventário de equipamentos: entrada/devolução,
 entrega a colaboradores, consulta e dashboard, com login via Microsoft
 Entra ID e sincronização com uma planilha do SharePoint/OneDrive.
 
+![Dashboard do Sistema](docs/Dashboard.png)
+
 Nasce 100% zerado — sem nenhuma empresa, tipo de equipamento ou dado de
 exemplo pré-carregado. As listas de empresa e tipo nas telas crescem
 organicamente conforme o uso, ou você carrega tudo de uma vez com
